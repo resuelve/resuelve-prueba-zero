@@ -1,0 +1,314 @@
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="ie=edge"/><title>Prueba Resuelve</title><style>body {font-family: sans-serif}
+.gray {color: #aaa;}
+.section {margin: 30px 0 0 30px; border-top: 2px solid #000; padding-top: 10px;}</style></head><body><h1>Prueba Resuelve</h1><p>Bienvenido a las pruebas para candidato Resuelve.<br/>Estas pruebas fueron diseñadas para evaluar la habilidad del desarrollador de frontend o backend.<br/>Cada sección tiene su propio reto pero si sabes como abstraer el problema es realmente fácil resolver los ejercicios.<br/>Para el ejercicio de frontend, no esperamos que seas un disegramador, pero si esperamos que tenga cierta estética (usar un framework de css es válido).<br/>Para el ejercico de backend, puedes usar cualquier lenguaje de programación el cual te sea más cómodo, sin embargo, debes incluir instrucciones de como montarlo, echarlo a andar y probarlo funcionando.</p><h2>Criterios de evaluación</h2><p>Cada prueba trae sus instrucciones propias, aparte de eso esperamos que cuente con lo siguiente:</p><ol><li>Tu código debe estar en un repositorio git (github, gitlab, bitbucket)</li><li>Debe contener un README.md donde explique como montar tu servicio y como correrlo para revisarlo</li></ol><p>Si tu código hace lo mínimo requerido está bien, pero todo lo extra que quieras agregar se evaluará y tomaremos en cuenta cosas como:</p><ol><li>Limpieza de código (que no sea un batidero)</li><li>Comentarios (que se entienda que hace cada sección)</li><li>Pruebas unitarias</li><li>Emojis, unicornios, arcoiris, etc</li></ol><h2>Sin miedo a equivocarse</h2><p>Nostros en Ingeniería de Resuelve no tenemos miedo a equivocarnos, lo vemos como un método de aprendizaje, recuerda que mientras aprendas, no es tiempo perdido.<br/>Así que no te agovies si no logras terminar toda la prueba (obvio es lo ideal xD). Mándanos tu mejor trabajo, nosotros tomaremos en cuenta todo lo que hiciste, tu forma de escribir código, tu forma de comentar, si parametrizaste la mayoria. Todo es parte de ti y nos interesa conocerlo, nadie nace sabiendo y si eres alguien adecuado nos gustaría que aprendieras con nosotros.</p><p>A continuación verás las dos pruebas existentes para frontend y backend. Por favor da click en la prueba que te asignaron para ver los detalles de la misma.</p><ul><li><a href="#frontend">Ejercicio Frontend</a></li><li><a href="#backend">Ejercicio Backend</a></li></ul><h2 id="frontend">Ejercicio Frontend</h2><h3>¿Cuál es el problema?</h3><ol><li>Nuestros clientes necesitan tener un lugar donde puedan hacer login con su usuario y contraseña para poder ver sus cuentas</li><li>Necesitamos un acceso administrador donde se puedan ver todos los usuarios y sus cuentas</li></ol><h3>¿Qué es lo que debo hacer?</h3><ol><li>Crear un SPA usando el framework de frontend que más te guste (jquery, angular, react, vue, backbone, etc)</li><li>En la app debe haber un login para usuarios y un login para administradores</li><li>Debes manejar JWT para las secciones protegidas (<a href="https://jwt.io/introduction/" target="_blank">Documentación</a>)</li><li>Algunos usuarios están desactivados y regresarán un error al hacer login</li><li>Del lado del admin debe poder ver un listado de clientes y por cada cliente un listado de movimientos</li><li>Del lado del cliente debe poder ver un listado de sus movimientos</li><li>Todos los listados deben tener un paginador y poder ordenar los elementos por cualquier columna por su nombre</li><li>En el caso del listado de movimientos, debe haber un botón para convertir los pesos en dólares y visceversa</li></ol><h3>Material de apoyo</h3><p>Sugerimos primero hagas la sección del admin para que puedas observar los usuarios existentes, cuales son sus correos y cuales están activos o desactivados.<br/>Posteriormente hacer la sección de clientes, la cual con lo anterior resuelto es solo cambiar los endpoints y reutilizar componentes.</p><p>Para poder lograr esto, se hizo un API donde puedes consultar todo lo necesario:</p><b>API URL <span class="gray">https://us-central1-prueba-resuelve.cloudfunctions.net</span></b><div>En todos los casos de usuarios y administrador el password es <span class="gray">pruebaresuelve123 </span>en MD5</div><div>El usuario de administrador es <span class="gray">admin</span></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/login</span><p>Para hacer login con cualquier usuario</p></div><div><b>Method </b><span class="gray">POST</span></div><div><b>Payload</b><pre>axios.post('API_URL/users/login', {
+  email: 'email del usuario',
+  password: 'password del usuario'
+})
+.then(function (response) {
+  console.log(response);
+})
+.catch(function (error) {
+  console.log(error);
+});</pre></div><div><b>Response</b><pre>// ok
+{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": "ok",
+  "status": 200
+}
+// error
+{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</pre></div><div>El token es un JWT que hay que desencriptar, en el token viene la información del usuario, ejemplo:<pre>{
+  "nombre": "Jordane",
+  "apellido": "Borer",
+  "segundo_nombre": "Sister",
+  "segundo_apellido": "",
+  "uid": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+  "email": "Parker_Wehner@gmail.com",
+  "active": true,
+  "created_at": "2017-08-17T11:27:18.417Z"
+}</pre></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/adminLogin</span><p>Para hacer login con el administrador</p></div><div><b>Method </b><span class="gray">POST</span></div><div><b>Payload</b><pre>axios.post('API_URL/users/adminLogin', {
+  user: 'usuario del admin',
+  password: 'password del admin'
+})
+.then(function (response) {
+  console.log(response);
+})
+.catch(function (error) {
+  console.log(error);
+});</pre></div><div><b>Response</b><pre>// ok
+{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": "ok",
+  "status": 200
+}
+// error
+{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</pre></div><div>El token es un JWT que hay que desencriptar, en el token viene la información del usuario, ejemplo:<pre>{
+  "nombre": "Admin",
+  "apellido": "Root",
+  "uid": "AAAAAAAA-DDDD-MMMM-IIII-NNNNNNNNNNNN",
+  "admin": true
+}</pre></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/myMovements</span><p>Trae un listado paginado de los movimientos del usuario que lo solicita</p></div><div><b>Method </b><span class="gray">GET</span></div><div><b>Payload</b><pre>axios.get('API_URL/users/myMovements', {
+  headers: { "Authorization": "Bearer &lt;Token&gt;" }
+})
+.then(function(response {
+  console.log(response)
+})
+.catch(function(error) {
+  console.log(error)
+})</pre></div><div><b>Response</b><pre>// ok
+{
+  "data": {
+    "pagination": {
+      "page": 1,
+      "totalPages": 10,
+      "totalItems": 100,
+      "hasMoreItems": true,
+      "sortBy": "created_at",
+      "sortDirection": "desc"
+    }
+    "records": [
+      {
+        "uid": "b3d573bd-2078-2cbb-510b-623ed27da7a6",
+        "account": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+        "amount": 297500,
+        "type": "credit",
+        "description": "Reenbolso",
+        "created_at": "2018-08-29T12:13:13.603Z"
+      }
+    ]
+  },
+  "status": 200
+}
+// error
+{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</pre></div><div><b>Notas:</b><ul><li>El amount está en centavos de pesos mexicanos</li><li>Se pueden mandar query strings a este endpoint:<pre>page = número de página
+sortBy = ordenamiento por cualquier elemento del objeto de movimientos
+sortDirection = asc o desc
+
+ej: /users/myMovements?page=2&amp;sortBy=amount&amp;sortDirection=desc</pre></li></ul></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/money/conversion</span><p>Trae un objeto de conversión de USD a Pesos</p></div><div><b>Method </b><span class="gray">GET</span></div><div><b>Payload</b><pre>axios.get('API_URL/money/conversion')
+.then(function(response {
+  console.log(response)
+})
+.catch(function(error) {
+  console.log(error)
+})</pre></div><div><b>Response</b><pre>// ok
+{
+  "data": {
+    usd2mxn: 20.136,
+    mxn2usd: 0.049
+  },
+  "status": 200
+}
+// error
+{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</pre></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/list</span><p>Trae un listado paginado de los usuarios en el sistema (endpoint para admin)</p></div><div><b>Method </b><span class="gray">GET</span></div><div><b>Payload</b><pre>axios.get('API_URL/users/list', {
+  headers: { "Authorization": "Bearer &lt;Token&gt;" }
+})
+.then(function(response {
+  console.log(response)
+})
+.catch(function(error) {
+  console.log(error)
+})</pre></div><div><b>Response</b><pre>// ok
+{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": {
+    "pagination": {
+      "page": 1,
+      "totalPages": 10,
+      "totalItems": 100,
+      "hasMoreItems": true,
+      "sortBy": "created_at",
+      "sortDirection": "desc"
+    }
+    records: [
+      {
+        "nombre": "Jordane",
+        "apellido": "Borer",
+        "segundo_nombre": "Sister",
+        "segundo_apellido": "",
+        "uid": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+        "email": "Parker_Wehner@gmail.com",
+        "active": false,
+        "created_at": "2017-08-17T11:27:18.417Z"
+      }
+    ]
+  },
+  "status": 200
+}
+// error
+{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</pre></div><div><b>Notas:</b><ul><li>Se pueden mandar query strings a este endpoint:<pre>page = número de página
+sortBy = ordenamiento por cualquier elemento del objeto de movimientos
+sortDirection = asc o desc
+
+ej: /users/list?page=2&amp;sortBy=apellido&amp;sortDirection=desc</pre></li></ul></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/:user_uid/movements</span><p>Trae un listado paginado de los movimientos del usuario solicitado (endpoint para admin)</p></div><div><b>Method </b><span class="gray">GET</span></div><div><b>Payload</b><pre>axios.get('API_URL/users/USER_UID/movements', {
+  headers: { "Authorization": "Bearer &lt;Token&gt;" }
+})
+.then(function(response {
+  console.log(response)
+})
+.catch(function(error) {
+  console.log(error)
+})</pre></div><div><b>Response</b><pre>// ok
+{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": {
+    "pagination": {
+      "page": 1,
+      "totalPages": 10,
+      "totalItems": 100,
+      "hasMoreItems": true,
+      "sortBy": "created_at",
+      "sortDirection": "desc"
+    }
+    records: [
+      {
+        "uid": "b3d573bd-2078-2cbb-510b-623ed27da7a6",
+        "account": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+        "amount": 297500,
+        "type": "credit",
+        "description": "Reenbolso",
+        "created_at": "2018-08-29T12:13:13.603Z"
+      }
+    ]
+  },
+  "status": 200
+}
+// error
+{
+  "data": "mensaje de error",
+  "status": 401 o 403 o 404
+}</pre></div><div><b>Notas:</b><ul><li>El amount está en centavos de pesos mexicanos</li><li>Se pueden mandar query strings a este endpoint:<pre>page = número de página
+sortBy = ordenamiento por cualquier elemento del objeto de movimientos
+sortDirection = asc o desc
+
+ej: /users/myMovements?page=2&amp;sortBy=amount&amp;sortDirection=desc</pre></li></ul></div></div><h2 id="backend">Ejercicio Backend</h2><h3>¿Cuál es el problema?</h3><ol><li>Hay que reportar todos los gastos de 2018 al área de finanzas, ellos esperan una estructura específica con un resumen de los gastos y un desgloce por cada cliente.</li><li>El API de nuestro sistema tiene un lugar donde regresar los datos de clientes y movimientos, pero solo por rangos de fechas y si trae más de cincuenta elementos contesta con un error.</li><li>El sistema que nos da la información está muy limitado en costos, por lo tanto es muy importante no hacer llamadas innecesarias al servicio (esto solo durante la ejecución de tu programa, mientras estás desarrollando no te limites)</li></ol><h3>¿Qué es lo que debo hacer?</h3><ol><li>Obtener un listado de todos los clientes (los cuales se dieron de alta en 2017)</li><li>Obtener un listado de todos los movimientos generales (creados durante el 2018)</li><li>Generar un resumen de todos los datos generales</li><li>Generar un resumen por cada cliente con la suma de sus movimientos</li><li>Armar un solo resultado que incluya ambos resúmenes con la estructura de datos esperada</li></ol><h3>Material de apoyo</h3><p>El objetivo de este servicio es que sea lo más rápido posible y que use la minima cantidad de llamadas al API de datos<br/>Genera un log de cuantas llamadas hiciste para obtener los datos y cuanto tiempo toma obtener toda la información.</p><b>API URL <span class="gray">https://us-central1-prueba-resuelve.cloudfunctions.net</span></b><div class="section"><div><b>Endpoint </b><span class="gray">/users/:start/:end</span><p>Trae un listado de los usuarios que fueron creados entre las fechas de inicio y fin<br/>Las fechas deben estar en formato YYYY-MM-DD<br/>Si hay más de 50 registros en el rango de fechas, contestará con la leyenda "Hay más de 50 elementos" y un status 406</p></div><div><b>Method </b><span class="gray">GET</span></div><div><b>Payload</b><pre>request.get(
+  'API_URL/users/2017-01-01/2017-01-14',
+  function(error, response) {
+    console.log(error, response)
+  }
+)</pre></div><div><b>Response</b><pre>// ok
+{
+  "data": {
+    [
+      {
+        "nombre": "Frances",
+        "apellido": "Eichmann",
+        "segundo_nombre": "",
+        "segundo_apellido": "Stark",
+        "uid": "812eea02-e741-4b01-9ff6-763d510db524",
+        "email": "Pasquale44@hotmail.com",
+        "active": false,
+        "created_at": "2017-01-04T13:42:53.778Z"
+      },
+      {
+        "nombre": "Roma",
+        "apellido": "Reynolds",
+        "segundo_nombre": "Laron",
+        "segundo_apellido": "",
+        "uid": "9c5c9cfc-bee6-e8ef-eba0-24e694988c36",
+        "email": "Maeve_Mertz@yahoo.com",
+        "active": false,
+        "created_at": "2017-01-05T17:53:21.565Z"
+      }
+    ]
+  },
+  "status": 200
+}
+// error
+{
+  "data": "Hay más de 50 elementos",
+  "status": 406
+}</pre></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/movements/:start/:end</span><p>Trae un listado de los movimientos que fueron creados entre las fechas de inicio y fin<br/>Las fechas deben estar en formato YYYY-MM-DD<br/>Si hay más de 50 registros en el rango de fechas, contestará con la leyenda "Hay más de 50 elementos" y el status 406</p></div><div><b>Method </b><span class="gray">GET</span></div><div><b>Payload</b><pre>request.get(
+  'API_URL/movements/2018-01-01/2018-01-01',
+  function(error, response) {
+    console.log(error, response)
+  }
+)</pre></div><div><b>Response</b><pre>// ok
+{
+  "data": {
+    [
+      {
+        "uid": "5678506d-6a4a-710d-12dc-7258fa0a4b56",
+        "account": "13b4053e-bbdf-66fd-d854-107ea544ccc8",
+        "amount": 195300,
+        "type": "credit",
+        "description": "Reenbolso",
+        "created_at": "2018-01-01T17:30:13.178Z"
+      },
+      {
+        "uid": "dabb5174-98b0-b99c-90ac-c1f3cc852b58",
+        "account": "83218d56-8046-045a-ca5d-e23e36e87f09",
+        "amount": 5307,
+        "type": "debit",
+        "description": "Disposición de efectivo",
+        "created_at": "2018-01-01T21:06:59.410Z"
+      }
+    ]
+  },
+  "status": 200
+}
+// error
+{
+  "data": "Hay más de 50 elementos",
+  "status": 406
+}</pre></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/conta/resumen</span><p>Aquí es donde hay que mandar la respuesta con el resumen de los datos</p></div><div><b>Method </b><span class="gray">POST</span></div><div><b>Payload</b><pre>request(
+  {
+    uri: 'API_URL/conta/resumen',
+    method: 'POST',
+    json: {
+      // el resumen en el formato esperado
+    }
+  }, function(error, response) {
+    console.log(error, response)
+  }
+)</pre></div><div><b>Response</b><pre>// ok
+{
+  "data": "recibido"
+  "status": 200
+}
+// error
+{
+  "data": descripción_del_error,
+  "status": 406
+}</pre></div><div><b>Notas:</b><ul><li>Este endpoint es muy estricto en la forma en que se deben recibir los valores, el formato esperado es el siguiente:<pre>{
+  "totalRecords": total_de_movimientos,
+  "totalCredit": suma_del_credit,
+  "totalDebit": suma_del_debit,
+  "balance": credit - debit,
+  "byUser": [
+    {
+      "name": nombre_del_usuario,
+      "uid": uid_del_usuario,
+      "records": total_de_movimientos_del_usuario,
+      "resumen": {
+        "credit": suma_del_credit_de_este_usuario,
+        "debit": suma_del_debit_de_este_usuario,
+        "balance": credit - debit
+      }
+    },
+    {
+      "name": otro_usuario,
+      "uid": uid_del_usuario,
+      "records": total_de_movimientos_del_usuario,
+      "resumen": {
+        "credit": suma_del_credit_de_este_usuario,
+        "debit": suma_del_debit_de_este_usuario,
+        "balance": credit - debit
+      }
+    },
+    ...
+  ]
+}</pre></li><li>Revisa la respuesta del servidor, pues te dirá si hay un error en el payload que estás mandando.</li></ul></div></div></body></html>
