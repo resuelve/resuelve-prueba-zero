@@ -6,5 +6,5 @@ const conta = require('./conta')
 
 exports.users = functions.https.onRequest(users)
 exports.money = functions.https.onRequest(money)
-exports.movements = functions.https.onRequest(movements)
+exports.movements = functions.https.onRequest(movements.routes)
 exports.conta = functions.https.onRequest(conta)
