@@ -1,0 +1,215 @@
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="ie=edge"/><script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script><title>title</title><style>body {
+  font-family: sans-serif;
+  background-color: #1A1E2A;
+  color: #C7C8C1;
+  margin: 30px;
+}
+* {
+  box-sizing: border-box;
+}
+a {
+  color: #C7C8C1;
+  font-weight: 700;
+}
+.gray {
+  color: #aaa;
+}
+.section {
+  border-top: 2px dashed #C7C8C1;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+.inputOutput {
+  display: flex;
+}
+.inputOutput > div {
+  width: 50%
+}
+.inputOutput > div:nth-child(3) {
+  width: 25%
+}
+.notes .title {
+  margin: 10px 0;
+  font-weight: 700;
+}
+code {
+  padding: 10px;
+  margin: 10px;
+}</style></head><body><h1>Ejercicio Frontend</h1><h3>¿Cuál es el problema?</h3><ol><li>Nuestros clientes necesitan tener un lugar donde puedan hacer login con su usuario y contraseña para poder ver sus cuentas</li><li>Necesitamos un acceso administrador donde se puedan ver todos los usuarios y sus cuentas</li></ol><h3>¿Qué es lo que debo hacer?</h3><ol><li>Crear un aplicación web en frontend usando la librería que más te guste (jquery, angular, react, vue, backbone, etc)</li><li>En la app debe haber un login para usuarios y un login para administradores</li><li>Debes manejar JWT para las secciones protegidas (<a href="https://jwt.io/introduction/" target="_blank">Documentación</a>)</li><li>Algunos usuarios están desactivados y regresarán un error al hacer login</li><li>Del lado del admin debe poder ver un listado de clientes y por cada cliente un listado de movimientos</li><li>Del lado del cliente debe poder ver un listado de sus movimientos</li><li>Todos los listados deben tener un paginador y poder ordenar los elementos por cualquier columna por su nombre</li><li>En el caso del listado de movimientos, debe haber un botón para convertir los pesos en dólares y viceversa</li><li>En esta pantalla ya está cargado axios, abre el inspector de código y prueba los ejemplos, cambiando los valores necesarios.</li></ol><h3>Material de apoyo</h3><p>Sugerimos primero hagas la sección del admin para que puedas observar los usuarios existentes, cuáles son sus correos y cuáles están activos o desactivados.<br/>Posteriormente hacer la sección de clientes, la cual con lo anterior resuelto es solo cambiar los endpoints y reutilizar componentes.</p><p>Para poder lograr esto, se hizo un API donde puedes consultar todo lo necesario:</p><b>API URL <span class="gray">https://us-central1-prueba-resuelve.cloudfunctions.net</span></b><div>En todos los casos de usuarios y administrador el password es <span class="gray">pruebaresuelve123 </span>(en MD5)</div><div>El usuario de administrador es <span class="gray">admin</span></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/adminLogin</span><p>Para hacer login con el administrador</p></div><div><b>Method </b><span class="gray">POST</span></div><br/><div class="inputOutput"><div><b>Payload</b><pre><code>axios.post('API_URL/users/adminLogin', {
+  user: 'usuario del admin',
+  password: 'password del admin'
+})
+.then(function (response) {
+  console.log(response);
+})
+.catch(function (error) {
+  console.log(error);
+});</code></pre></div><div><b>Response Success</b><pre><code>{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": "ok",
+  "status": 200
+}</code></pre></div><div><b>Response Error</b><pre><code>{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</code></pre></div></div><div class="notes"><div class="title">Notas:</div>El token es un JWT que hay que desencriptar, en el token viene la información del usuario, ejemplo:<pre><code>{
+  "nombre": "Admin",
+  "apellido": "Root",
+  "uid": "AAAAAAAA-DDDD-MMMM-IIII-NNNNNNNNNNNN",
+  "admin": true
+}</code></pre></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/list</span><p>Trae un listado paginado de los usuarios en el sistema (endpoint para admin)</p></div><div><b>Method </b><span class="gray">GET</span></div><br/><div class="inputOutput"><div><b>Payload</b><pre><code>axios.get('API_URL/users/list', {
+  headers: { "Authorization": "Bearer &lt;Token&gt;" }
+})
+.then(function (response) {
+  console.log(response)
+})
+.catch(function (error) {
+  console.log(error)
+})</code></pre></div><div><b>Response Success</b><pre><code>{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": {
+    "pagination": {
+      "page": 1,
+      "totalPages": 10,
+      "totalItems": 100,
+      "hasMoreItems": true,
+      "sortBy": "created_at",
+      "sortDirection": "desc"
+    }
+    records: [
+      {
+        "nombre": "Jordane",
+        "apellido": "Borer",
+        "segundo_nombre": "Sister",
+        "segundo_apellido": "",
+        "uid": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+        "email": "Parker_Wehner@gmail.com",
+        "active": false,
+        "created_at": "2017-08-17T11:27:18.417Z"
+      }
+    ]
+  },
+  "status": 200
+}</code></pre></div><div><b>Response Error</b><pre><code>{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</code></pre></div></div><div class="notes"><div class="title">Notas:</div><ul><li>Se pueden mandar query strings a este endpoint:<pre><code>page = número de página
+sortBy = ordenamiento por cualquier elemento del objeto de movimientos
+sortDirection = asc o desc
+
+ej: /users/list?page=2&amp;sortBy=apellido&amp;sortDirection=desc</code></pre></li></ul></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/:user_uid/movements</span><p>Trae un listado paginado de los movimientos del usuario solicitado (endpoint para admin)</p></div><div><b>Method </b><span class="gray">GET</span></div><br/><div class="inputOutput"><div><b>Payload</b><pre><code>axios.get('API_URL/users/USER_UID/movements', {
+  headers: { "Authorization": "Bearer &lt;Token&gt;" }
+})
+.then(function (response) {
+  console.log(response)
+})
+.catch(function (error) {
+  console.log(error)
+})</code></pre></div><div><b>Response Success</b><pre><code>{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": {
+    "pagination": {
+      "page": 1,
+      "totalPages": 10,
+      "totalItems": 100,
+      "hasMoreItems": true,
+      "sortBy": "created_at",
+      "sortDirection": "desc"
+    }
+    records: [
+      {
+        "uid": "b3d573bd-2078-2cbb-510b-623ed27da7a6",
+        "account": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+        "amount": 297500,
+        "type": "credit",
+        "description": "Reenbolso",
+        "created_at": "2018-08-29T12:13:13.603Z"
+      }
+    ]
+  },
+  "status": 200
+}</code></pre></div><div><b>Response Error</b><pre><code>{
+  "data": "mensaje de error",
+  "status": 401 o 403 o 404
+}</code></pre></div></div><div class="notes"><div class="title">Notas:</div><ul><li>El amount está en centavos de pesos mexicanos</li><li>Se pueden mandar query strings a este endpoint:<pre><code>page = número de página
+sortBy = ordenamiento por cualquier elemento del objeto de movimientos
+sortDirection = asc o desc
+
+ej: /users/myMovements?page=2&amp;sortBy=amount&amp;sortDirection=desc</code></pre></li></ul></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/login</span><p>Para hacer login con cualquier usuario</p></div><div><b>Method </b><span class="gray">POST</span></div><br/><div class="inputOutput"><div><b>Payload</b><pre><code>axios.post('API_URL/users/login', {
+  email: 'email del usuario',
+  password: 'password del usuario'
+})
+.then(function (response) {
+  console.log(response);
+})
+.catch(function (error) {
+  console.log(error);
+});</code></pre></div><div><b>Response Success</b><pre><code>{
+  "headers": {"Authorization": "Bearer &lt;token&gt;"}
+  "data": "ok",
+  "status": 200
+}</code></pre></div><div><b>Response Error</b><pre><code>{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</code></pre></div></div><div class="notes"><div class="title">Notas:</div>El token es un JWT que hay que desencriptar, en el token viene la información del usuario, ejemplo:<pre><code>{
+  "nombre": "Jordane",
+  "apellido": "Borer",
+  "segundo_nombre": "Sister",
+  "segundo_apellido": "",
+  "uid": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+  "email": "Parker_Wehner@gmail.com",
+  "active": true,
+  "created_at": "2017-08-17T11:27:18.417Z"
+}</code></pre></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/users/myMovements</span><p>Trae un listado paginado de los movimientos del usuario que lo solicita</p></div><div><b>Method </b><span class="gray">GET</span></div><br/><div class="inputOutput"><div><b>Payload</b><pre><code>axios.get('API_URL/users/myMovements', {
+  headers: { "Authorization": "Bearer &lt;Token&gt;" }
+})
+.then(function (response) {
+  console.log(response)
+})
+.catch(function (error) {
+  console.log(error)
+})</code></pre></div><div><b>Response Success</b><pre><code>{
+  "data": {
+    "pagination": {
+      "page": 1,
+      "totalPages": 10,
+      "totalItems": 100,
+      "hasMoreItems": true,
+      "sortBy": "created_at",
+      "sortDirection": "desc"
+    }
+    "records": [
+      {
+        "uid": "b3d573bd-2078-2cbb-510b-623ed27da7a6",
+        "account": "1cf80232-8758-1a10-9fbc-d34c9c6df6d1",
+        "amount": 297500,
+        "type": "credit",
+        "description": "Reenbolso",
+        "created_at": "2018-08-29T12:13:13.603Z"
+      }
+    ]
+  },
+  "status": 200
+}</code></pre></div><div><b>Response Error</b><pre><code>{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</code></pre></div></div><div class="notes"><div class="title">Notas:</div><ul><li>El amount está en centavos de pesos mexicanos</li><li>Se pueden mandar query strings a este endpoint:<pre><code>page = número de página
+sortBy = ordenamiento por cualquier elemento del objeto de movimientos
+sortDirection = asc o desc
+
+ej: /users/myMovements?page=2&amp;sortBy=amount&amp;sortDirection=desc</code></pre></li></ul></div></div><div class="section"><div><b>Endpoint </b><span class="gray">/money/conversion</span><p>Trae un objeto de conversión de USD a Pesos</p></div><div><b>Method </b><span class="gray">GET</span></div><br/><div class="inputOutput"><div><b>Payload</b><pre><code>axios.get('API_URL/money/conversion')
+.then(function (response) {
+  console.log(response)
+})
+.catch(function (error) {
+  console.log(error)
+})</code></pre></div><div><b>Response Sucess</b><pre><code>{
+  "data": {
+    usd2mxn: 20.136,
+    mxn2usd: 0.049
+  },
+  "status": 200
+}</code></pre></div><div><b>Response Error</b><pre><code>{
+  "data": "mensaje de error",
+  "status": 401 o 403
+}</code></pre></div></div></div><script>hljs.initHighlightingOnLoad();</script></body></html>

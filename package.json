@@ -1,11 +1,20 @@
 {
-  "name": "prueba_resuelve",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./app/index.js",
+    "buildIndex": "pug ./app/public/index.pug ./app/public/index.html"
   },
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "jwt-simple": "^0.5.5"
+  },
+  "private": true,
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "pug-cli": "^1.0.0-alpha6",
+    "standard": "^12.0.1"
+  }
 }
