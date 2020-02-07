@@ -1,0 +1,7 @@
+test
+node_modules
+.drone.yml
+.env
+*Dockerfile
+*.md
+docs
