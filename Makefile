@@ -6,6 +6,7 @@
 
 
 # DOCKER IMAGE ENV VARS
+DOCKER_ORG=jmedinaresolv
 PRUEBA_APP_NAME = resuelve-prueba-zero
 PRUEBA_APP_VERSION = latest
 PRUEBA_DOCKER_REPO = ${PRUEBA_APP_NAME}:${PRUEBA_APP_VERSION}
@@ -17,22 +18,21 @@ all: help
 
 build:
 	@echo "Building ${PRUEBA_DOCKER_REPO} image."
-	docker build -t ${PRUEBA_DOCKER_REPO} .
+	docker build -t ${DOCKER_ORG}/${PRUEBA_DOCKER_REPO} .
 	@echo "Listing ${PRUEBA_DOCKER_REPO} image."
 	docker images | grep ${PRUEBA_APP_NAME}
 
 test:
 	@echo "Run ${PRUEBA_DOCKER_REPO} image."
-	docker run --name ${PRUEBA_APP_NAME} -p ${APP_PORT} -d ${PRUEBA_DOCKER_REPO} &
+	docker run --name ${PRUEBA_APP_NAME} -p ${APP_PORT} -d ${DOCKER_ORG}/${PRUEBA_DOCKER_REPO} &
 	@echo "Wait until ${PRUEBA_DOCKER_REPO} is fully started."
 	sleep 5
 	docker logs ${PRUEBA_APP_NAME}
 
 release:
 	@echo "Push ${PRUEBA_DOCKER_REPO} image to docker registry."
-	cat ${DOCKER_PWD} | docker login --username ${DOCKER_USER} --password-stdin
-	docker tag ${PRUEBA_DOCKER_REPO} ${PRUEBA_DOCKER_REPO}
-	docker push ${PRUEBA_DOCKER_REPO}
+	docker tag ${DOCKER_ORG}/${PRUEBA_DOCKER_REPO} ${DOCKER_ORG}/${PRUEBA_DOCKER_REPO}
+	docker push ${DOCKER_ORG}/${PRUEBA_DOCKER_REPO}
 
 clean:
 	@echo ""
