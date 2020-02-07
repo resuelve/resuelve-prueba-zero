@@ -18,6 +18,8 @@ app.get('/:location', (req, res) => {
   res.sendFile(path.join(__dirname, `./public/${req.params.location}.html`))
 })
 
-app.listen(1337, () => {
-  console.log('localhost server online')
+const port = process.env.PORT || 1337
+
+app.listen(port, () => {
+  console.log('localhost server online on port', port)
 })
