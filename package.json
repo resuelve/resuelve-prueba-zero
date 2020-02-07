@@ -3,7 +3,7 @@
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "start": "node ./app/index.js",
-    "buildIndex": "pug ./app/public/index.pug ./app/public/index.html"
+    "build:statics": "pug ./app/public"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
