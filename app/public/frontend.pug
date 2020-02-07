@@ -1,4 +1,6 @@
 extends _head.pug
+block title
+  title Ejercicio Frontend
 block content
   h1 Ejercicio Frontend
   h3 ¿Cuál es el problema?
@@ -24,7 +26,8 @@ block content
   p Para poder lograr esto, se hizo un API donde puedes consultar todo lo necesario:
   b
     |API URL 
-    span.gray TBD
+    span.gray#API_URL TBD
+    script document.getElementById('API_URL').outerHTML = window.location.origin
   div
     |En todos los casos de usuarios y administrador el password es 
     span.gray pruebaresuelve123 

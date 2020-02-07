@@ -1,4 +1,6 @@
 extends _head.pug
+block title
+  title Ejercicio Backend
 block content
   h1 Ejercicio Backend
   h3 ¿Cuál es el problema?
@@ -20,7 +22,8 @@ block content
     |Genera un log de cuantas llamadas hiciste para obtener los datos y cuánto tiempo toma obtener toda la información.
   b
     |API URL 
-    span.gray https://us-central1-prueba-resuelve.cloudfunctions.net
+    span.gray#API_URL TBD
+    script document.getElementById('API_URL').outerHTML = window.location.origin
   div.section
     div
       b Endpoint 
