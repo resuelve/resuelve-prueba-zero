@@ -9,7 +9,7 @@
 PRUEBA_APP_NAME = resuelve-prueba-zero
 PRUEBA_APP_VERSION = latest
 PRUEBA_DOCKER_REPO = ${PRUEBA_APP_NAME}:${PRUEBA_APP_VERSION}
-APP_PORT = 8080:1337
+APP_PORT = 8080:8080
 
 .PHONY: all build test release clean help
 
